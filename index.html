@@ -176,7 +176,26 @@ const sendButton = document.getElementById("send");
 const micButton = document.getElementById("mic");
 const chat = document.getElementById("chat");
 const status = document.getElementById("status");
+const settingsButton =
+    document.getElementById("settingsButton");
 
+settingsButton.addEventListener("click", () => {
+
+    const apiKey = prompt(
+        "Enter your API key:"
+    );
+
+    if (apiKey === null) {
+        return;
+    }
+
+    localStorage.setItem(
+        "jarvis_api_key",
+        apiKey.trim()
+    );
+
+    alert("API key saved on this device.");
+});
 function addMessage(text, type) {
 
     const message = document.createElement("div");
