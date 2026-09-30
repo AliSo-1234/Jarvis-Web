@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#0a0f14">
+
+    <title>Jarvis</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #080b0f;
+            color: #e8f7ff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 700px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #0d1218;
+        }
+
+        header {
+            padding: 20px;
+            border-bottom: 1px solid #1d303a;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 28px;
+            letter-spacing: 6px;
+            color: #00d9ff;
+        }
+
+        .status {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #00dc78;
+            letter-spacing: 2px;
+        }
+
+        #chat {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .jarvis {
+            background: #111d25;
+            border: 1px solid #193440;
+        }
+
+        .user {
+            background: #162b35;
+            border: 1px solid #24505d;
+        }
+
+        .label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #00d9ff;
+            margin-bottom: 6px;
+        }
+
+        .input-area {
+            padding: 14px;
+            border-top: 1px solid #1d303a;
+            display: flex;
+            gap: 8px;
+        }
+
+        #input {
+            flex: 1;
+            min-width: 0;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #29404b;
+            background: #080d11;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            border: none;
+            border-radius: 12px;
+            padding: 0 16px;
+            background: #00a8c7;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #mic {
+            width: 52px;
+            padding: 0;
+            font-size: 22px;
+        }
+
+        button:active {
+            transform: scale(0.96);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <header>
+        <div class="title">JARVIS</div>
+        <div class="status" id="status">ONLINE</div>
+    </header>
+
+    <main id="chat">
+
+        <div class="message jarvis">
+            <div class="label">JARVIS</div>
+            Good day. I am Jarvis. How may I assist you?
+        </div>
+
+    </main>
+
+    <div class="input-area">
+
+        <input
+            id="input"
+            type="text"
+            placeholder="Talk to Jarvis..."
+            autocomplete="off"
+        >
+
+        <button id="mic">🎙</button>
+
+        <button id="send">➤</button>
+
+    </div>
+
+</div>
+
+<script>
+
+const input = document.getElementById("input");
+const sendButton = document.getElementById("send");
+const micButton = document.getElementById("mic");
+const chat = document.getElementById("chat");
+const status = document.getElementById("status");
+
+function addMessage(text, type) {
+
+    const message = document.createElement("div");
+    message.className = "message " + type;
+
+    const label = document.createElement("div");
+    label.className = "label";
+    label.textContent = type === "user" ? "YOU" : "JARVIS";
+
+    const content = document.createElement("div");
+    content.textContent = text;
+
+    message.appendChild(label);
+    message.appendChild(content);
+
+    chat.appendChild(message);
+
+    chat.scrollTop = chat.scrollHeight;
+}
+
+sendButton.addEventListener("click", () => {
+
+    const text = input.value.trim();
+
+    if (!text) return;
+
+    addMessage(text, "user");
+
+    input.value = "";
+
+    addMessage(
+        "I received your message. My AI brain will be connected in the next step.",
+        "jarvis"
+    );
+});
+
+input.addEventListener("keydown", (event) => {
+
+    if (event.key === "Enter") {
+        sendButton.click();
+    }
+
+});
+
+micButton.addEventListener("click", () => {
+
+    if (!("webkitSpeechRecognition" in window) &&
+        !("SpeechRecognition" in window)) {
+
+        addMessage(
+            "Speech recognition is not supported by this browser.",
+            "jarvis"
+        );
+
+        return;
+    }
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.continuous = false;
+
+    status.textContent = "LISTENING...";
+    status.style.color = "#ffd000";
+
+    recognition.onresult = (event) => {
+
+        const text =
+            event.results[0][0].transcript;
+
+        input.value = text;
+
+        status.textContent = "ONLINE";
+        status.style.color = "#00dc78";
+    };
+
+    recognition.onerror = () => {
+
+        status.textContent = "ONLINE";
+        status.style.color = "#00dc78";
+    };
+
+    recognition.onend = () => {
+
+        status.textContent = "ONLINE";
+        status.style.color = "#00dc78";
+    };
+
+    recognition.start();
+});
+
+</script>
+
+</body>
+      </html>
