@@ -120,6 +120,15 @@
         button:active {
             transform: scale(0.96);
         }
+        #settingsButton {
+    margin-top: 12px;
+    padding: 8px 14px;
+    border: 1px solid #24505d;
+    background: #111d25;
+    color: #00d9ff;
+    border-radius: 8px;
+    font-size: 13px;
+        }
     </style>
 </head>
 
@@ -128,9 +137,11 @@
 <div class="app">
 
     <header>
-        <div class="title">JARVIS</div>
-        <div class="status" id="status">ONLINE</div>
-    </header>
+    <div class="title">JARVIS</div>
+    <div class="status" id="status">ONLINE</div>
+
+    <button id="settingsButton">⚙️ Settings</button>
+</header>
 
     <main id="chat">
 
