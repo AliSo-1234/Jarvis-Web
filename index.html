@@ -205,15 +205,6 @@ sendButton.addEventListener("click", async () => {
     addMessage(text, "user");
 
     input.value = "";
-const apiKey = localStorage.getItem("jarvis_api_key");
-
-if (!apiKey) {
-    addMessage(
-        "Please open Settings and enter your 1xAi API key first.",
-        "jarvis"
-    );
-    return;
-}
 
 status.textContent = "THINKING...";
 status.style.color = "#ffd000";
