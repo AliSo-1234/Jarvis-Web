@@ -216,8 +216,7 @@ function addMessage(text, type) {
     chat.scrollTop = chat.scrollHeight;
 }
 
-sendButton.addEventListener("click", () => {
-
+sendButton.addEventListener("click", async () => {
     const text = input.value.trim();
 
     if (!text) return;
